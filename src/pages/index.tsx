@@ -48,6 +48,7 @@ const CreatePostForm = () => {
   });
 
   const { data: sesh } = trpc.auth.getSession.useQuery();
+  const disabled = !sesh?.user;
 
   return (
     <div className="shadow-xl rounded-lg p-4 flex w-full flex-col gap-4">
@@ -60,6 +61,7 @@ const CreatePostForm = () => {
           <input
             className="border border-gray-300 rounded-md p-2"
             value={title}
+            disabled={disabled}
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
@@ -68,15 +70,16 @@ const CreatePostForm = () => {
           <input
             className="border border-gray-300 rounded-md p-2"
             value={body}
+            disabled={disabled}
             onChange={(e) => setBody(e.target.value)}
           />
         </div>
       </div>
       <button
-        disabled={!sesh?.user}
         className={`bg-purple-300 text-white rounded-md p-2 ${
           !sesh ? "bg-purple-100" : ""
         }`}
+        disabled={disabled}
         onClick={() => {
           createPostMutation.mutate({ title, body });
         }}
